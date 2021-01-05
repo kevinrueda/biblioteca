@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             GradoSeeder::class,
             RoleSeeder::class,
             GeneroSeeder::class,
-            EstadoUsuarioSeeder::class]);    
+            EstadoUsuarioSeeder::class,
+            PsDeweySeeder::class]);    
     }
 }

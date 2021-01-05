@@ -44,21 +44,27 @@
             <div class="mt-2">
                 <x-label for="departamento_id" :value="__('Departamento')" />
 
-                <x-input id="departamento_id" class="block mt-1 w-full" type="text" name="departamento_id" :value="old('departamento_id')" required autofocus />
+                <select class="form-select block w-full mt-1 rounded border-gray-300" id="departamento_id">
+                    <option value="0" hidden selected></option>
+                    @foreach($departamentos as $departamento)
+                    <option  value="{{ $departamento->id }}">
+                    {{ ucfirst($departamento->nombre) }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Municipio_id -->
             <div class="mt-2">
                 <x-label for="municipio_id" :value="__('Municipio')" />
 
-                <x-input id="municipio_id" class="block mt-1 w-full" type="text" name="municipio_id" :value="old('municipio_id')" required autofocus />
+                <select class="form-select block w-full mt-1 rounded border-gray-300" id="municipio_id" name="municipio_id"></select>
             </div>
 
             <!-- Fecha_nacimiento -->
             <div class="mt-2">
-                <x-label for="nombre" :value="__('Fecha de nacimiento')" />
+                <x-label for="fecha_nacimiento" :value="__('Fecha de nacimiento')" />
 
-                <x-input id="fecha_nacimiento" class="block mt-1 w-full" type="date" name="fecha_nacimiento" :value="old('fecha_nacimiento')" required autofocus />
+                <x-input id="fecha_nacimiento" class="block mt-1 w-full text-gray-600" type="date" name="fecha_nacimiento" :value="old('fecha_nacimiento')" required autofocus />
             </div>
 
             <!-- Telefono -->
@@ -70,60 +76,100 @@
 
             <!-- Contraseña -->
             <div class="mt-2">
-                <x-label for="contraseña" :value="__('Contraseña')" />
+                <x-label for="password" :value="__('Password')" />
 
                 <x-input id="password" class="block mt-1 w-full"
                                 type="password"
-                                name="contraseña"
+                                name="password"
                                 required autocomplete="new-password" />
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mt-2">
-                <x-label for="password_confirmation" :value="__('Confirmar Contraseña')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="contraseña_confirmacion" required />
             </div>
 
             <!-- Jornada_id -->
             <div class="mt-2">
                 <x-label for="jornada_id" :value="__('Jornada')" />
-
-                <x-input id="jornada_id" class="block mt-1 w-full" type="text" name="jornada_id" :value="old('jornada_id')" required autofocus />
+                
+                <select class="form-select block w-full mt-1 rounded border-gray-300" id="jornada_id" name="jornada_id">
+                        <option value="0" hidden selected></option>
+                        @foreach($jornadas as $jornada)
+                        <option  value="{{ $jornada->id }}">
+                        {{ ucfirst($jornada->nombre) }}</option>
+                        @endforeach
+                </select>
             </div>
 
             <!-- Grado_id -->
             <div class="mt-2">
                 <x-label for="grado_id" :value="__('Grado')" />
 
-                <x-input id="grado_id" class="block mt-1 w-full" type="text" name="grado_id" :value="old('grado_id')" required autofocus />
+                <select class="form-select block w-full mt-1 rounded border-gray-300" id="grado_id" name="grado_id">
+                        <option value="0" hidden selected></option>
+                        @foreach($grados as $grado)
+                        <option  value="{{ $grado->id }}">
+                        {{ ucfirst($grado->nombre) }}</option>
+                        @endforeach
+                </select>
             </div>
 
             <!-- Genero_id -->
             <div class="mt-2">
                 <x-label for="genero_id" :value="__('Género')" />
 
-                <x-input id="genero_id" class="block mt-1 w-full" type="text" name="genero_id" :value="old('genero_id')" required autofocus />
+                <select class="form-select block w-full mt-1 rounded border-gray-300" id="genero_id" name="genero_id">
+                        <option value="0" hidden selected></option>
+                        @foreach($generos as $genero)
+                        <option  value="{{ $genero->id }}">
+                        {{ ucfirst($genero->nombre) }}</option>
+                        @endforeach
+                </select>
             </div>
 
             <!-- Preferencia -->
             <div class="mt-2">
                 <x-label for="preferencia" :value="__('Preferencia')" />
 
-                <x-input id="preferencia" class="block mt-1 w-full" type="text" name="preferencia" :value="old('preferencia')" required autofocus />
+                <select class="form-select block w-full mt-1 rounded border-gray-300" name="preferencia" id="preferencia_id">
+                    <option value="0" hidden selected></option>
+                    @foreach($ps_deweys as $ps_deweys)
+                    <option  value="{{ $ps_deweys->id }}">
+                    {{ ucfirst($ps_deweys->nombre) }}</option>
+                    @endforeach
+            </select>
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                    {{ __('¿Ya está registrado?') }}
                 </a>
 
                 <x-button class="ml-4">
-                    {{ __('Register') }}
+                    {{ __('Registrarse') }}
                 </x-button>
             </div>
         </form>
+        <script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+
+        <script>
+            $(document).ready(function () {
+            $('#departamento_id').on('change', function () {
+            let id = $(this).val();
+            $('#municipio_id').empty();
+            $('#municipio_id').append(`<option value="0" hidden selected></option>`);
+            $.ajax({
+            type: 'GET',
+            url: 'register/' + id,
+            success: function (response) {
+            var response = JSON.parse(response);
+            console.log(response);   
+            $('#municipio_id').empty();
+            $('#municipio_id').append(`<option value="0" hidden selected></option>`);
+            response.forEach(element => {
+                $('#municipio_id').append(`<option value="${element['id']}">${element['nombre']}</option>`);
+                });
+            }
+        });
+    });
+});
+</script>
+
     </x-auth-card>
 </x-guest-layout>

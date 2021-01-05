@@ -124,7 +124,7 @@ class DepartamentoSeeder extends Seeder
         ]);
         DB::table('departamentos')->insert([
             'id' => '88',
-            'nombre' => 'ARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA',
+            'nombre' => 'ARCHIPIÉLAGO DE SAN ANDRÉS PROVIDENCIA',
         ]);
         DB::table('departamentos')->insert([
             'id' => '91',
