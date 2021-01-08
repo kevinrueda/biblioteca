@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EditorialeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,5 @@ Route::get('/dash', function () {
 })->middleware(['auth'])->name('dash');
 
 require __DIR__.'/auth.php';
+
+Route::resource('/editoriales', EditorialeController::class);

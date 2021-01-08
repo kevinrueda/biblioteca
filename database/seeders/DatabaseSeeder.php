@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             GeneroSeeder::class,
             EstadoUsuarioSeeder::class,
             PsDeweySeeder::class,
-            SsDeweySeeder::class, */
-            TsDeweySeeder::class,]);    
+            SsDeweySeeder::class, 
+            TsDeweySeeder::class,*/
+            EditorialeSeeder::class]);    
     }
 }
