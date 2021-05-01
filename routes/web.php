@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AutoreController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EditorialeController;
+use App\Http\Controllers\ParametroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +27,9 @@ Route::get('/dash', function () {
 require __DIR__.'/auth.php';
 
 Route::resource('/editoriales', EditorialeController::class);
+
+Route::resource('/autores', AutoreController::class);
+
+Route::resource('/parametros', ParametroController::class);
+
+Route::get('/datatable/editoriales', [EditorialeController::class, 'editorial'])->name('datatable.editorial');

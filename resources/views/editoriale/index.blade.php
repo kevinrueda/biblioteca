@@ -9,96 +9,22 @@
 @section('content')
     <div class="container">
         <a type="button" class="btn btn-success text-white float-right" data-toggle="modal"
-            data-target="#exampleModal"><b>Nuevo</b></a>
-        <table id="editoriales" class="table table-hover table-bordered table-striped text-center mt-4">
-            <thead class="bg-primary">
+            data-target="#modalCrear"><b>Nuevo</b></a>
+        <table id="tbEditoriales" class="table table-hover table-bordered table-striped text-center mt-4">
+            <thead class="bg-dark">
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Acciones</th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th width="200px">Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($editoriales as $editorial)
-                    <tr>
-                        <td>{{ $editorial->id }}</td>
-                        <td>{{ $editorial->nombre }}</td>
-                        <td>
-                            <a type="button" class="btn btn-danger text-white m-1" data-toggle="modal"
-                                data-target="#eliminarModal{{ $editorial->id }}">Eliminar</a>
-                            <a type="button" class="btn btn-secondary text-white m-1" data-toggle="modal"
-                                data-target="#editarModal{{ $editorial->nombre }}">Editar</a>
-                        </td>
-                    </tr>
-                    <div class="modal fade" id="eliminarModal{{ $editorial->id }}">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #f7949c">
-                                    <h5 class="modal-title">Eliminar editorial</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">
-                                            ×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <p class="text-center">Está seguro(a) de eliminar el editorial
-                                            {{ $editorial->nombre }} /
-                                            {{ $editorial->id }}?
-                                        </p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="{{ route('editoriales.destroy', $editorial->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cerrar</button>
-                                            <button href="#" type="submit" class="btn btn-danger">Eliminar</button>
-                                        </form>
-                                        </td>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="editarModal{{ $editorial->nombre }}">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color: #e3e4e8">
-                                    <h5 class="modal-title">Editar editorial</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">
-                                            ×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{ route('editoriales.update', $editorial->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="form-group">
-                                            <label for="nombre" class="col-form-label">Nombre</label>
-                                            <input type="text" class="form-control" id="nombre" name="nombre"
-                                                value="{{ $editorial->nombre }}">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cerrar</button>
-                                            <button type="submit" class="btn btn-primary">Editar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </tbody>
         </table>
     </div>
 
-    <div class="modal fade" id="exampleModal">
+    <div id="modalCrear" class="modal fade" >
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header" style="background-color:#c2efcd ">
+                <div class="modal-header bg-gradient-success">
                     <h5 class="modal-title">Nueva editorial</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">
@@ -106,15 +32,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/editoriales" method="POST">
-                        @csrf
+                    <form id="frmEditoriales" action="editoriales">
                         <div class="form-group">
                             <label for="nombre" class="col-form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre">
+                            <input id="nombre" name="nombre" type="text" class="form-control"  required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                            <button id="btnCrear" type="submit" class="btn btn-success"
+                                data-dismiss="modal">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -122,37 +48,186 @@
         </div>
     </div>
 
+    <div id="modalEditar" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-secondary">
+                    <h5 class="modal-title">Modificar editorial</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">
+                            ×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmEditar">
+                        <div class="form-group">
+                            <label for="id" class="col-form-label">ID</label>
+                            <input id="id" name="id" type="text" class="form-control" readonly>
+                            <label for="nombreEditar" class="col-form-label">Nombre</label>
+                            <input id="nombreEditar" name="nombreEditar" type="text" class="form-control" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                            <button id="btnEditar" type="submit" class="btn btn-success"
+                                data-dismiss="modal">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('js')
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    $(document).ready(function() {
-    $('#editoriales').DataTable({
-        "lengthMenu" : [[5,10,50,-1], [5,10,50,"All"]],
-        responsive: true,
-        autoWith: false,
-        "language": {
-            "lengthMenu": "Mostrar _MENU_ registros por página",
-            "zeroRecords": "Nada encontrado - disculpa",
-            "info": "Mostrando la página _PAGE_ de _PAGES_",
-            "infoEmpty": "No records available",
-            "infoFiltered": "(filtrado de _MAX_ registros totales)",
-            "search": "Buscar: ",
-            "paginate" : {
-                "next" : "Siguiente",
-                "previous" : "Anterior"
-            }
-        }
-    });
-} );
-</script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+
+        //Al cargar la pagina se establece la relacion de la tabla con DataTable
+        $(document).ready(function() {
+            var editoriales = $("#tbEditoriales").DataTable({
+                "lengthMenu": [
+                    [10, 50, -1],
+                    [10, 50, "All"]
+                ],
+                //serverSide se utiliza cuando existen muchos datos y es necesario que las procese el servidor
+                serverSide: true,
+                //Se le asigna la ruta a Ajax para recuperar a traves del metodo GET los registros de la BD
+                ajax: "{{ route('datatable.editorial') }}",
+                /*Se configura previamente valores por defecto para determinadas columnas
+                en este caso la columna de Acciones[las columnas se enumeran desde 0] 
+                no se puede ordenar alfabeticamente ni tampoco filtrar por ese campo*/
+                columnDefs: [{
+                    targets: 2,
+                    orderable: false,
+                    serchable: false
+                }],
+                //Se configura el objeto data con el nombre de las columnas
+                columns: [{
+                        data: "id",
+                    },
+                    {
+                        data: "nombre",
+                    },
+                    {
+                        data: "acciones",
+                    }
+                ],
+                //Optimiza el diseño de la tabla
+                responsive: true,
+                //Control de tamaño de columnas
+                autoWidth: false,
+
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "Nada encontrado - disculpa",
+                    "info": "Mostrando la página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar: ",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+
+        });
+
+        //Funcion para el evento click del boton btnCrear
+        $("body").on("click", "#btnCrear", function(e) {
+            //Evita enviar el formulario por defecto dado que se hara por Ajax
+            e.preventDefault();
+            //Se asigna los valores que tiene el input con id nombre
+            let nombre = $("#nombre").val();
+            let token = "{{ csrf_token() }}";
+            //Se crea el objeto data que almacena los valores anteriores
+            let data = {
+                nombre: nombre,
+                _token: token
+            };
+
+            //Codigo Ajax encargado de almacenar un nuevo registro a la BD
+            $.ajax({
+                type: "POST",
+                url: "{{ route("editoriales.store") }}",
+                data: data,
+                //Si el metodo POST fue exitoso se lleva a cabo el siguiente codigo
+                success: function() {
+                    //Asigna a la variable editoriales la tabla de la BD
+                    let editoriales = $("#tbEditoriales").DataTable();
+                    //Actualiza la tabla sin recargar la pagina y mantiene el indice de la paginacion
+                    editoriales.ajax.reload(null, false);
+                    $("#nombre").val("");
+                }
+            })
+        });
+
+        $("body").on("click", "#btnEditar", function(e) {
+            e.preventDefault();
+            let nombre = $("#nombreEditar").val();
+            let token = "{{ csrf_token() }}";
+            let id = $("#id").val()
+            let data = {
+                id: id,
+                nombre: nombre,
+                _token: token
+            };
+
+            //Codigo Ajax encargado de modificar un registro de la BD
+            $.ajax({
+                type: "PATCH",
+                url: "/editoriales/" + id,
+                data: data,
+                success: function() {
+                    var editoriales = $("#tbEditoriales").DataTable();
+                    editoriales.ajax.reload(null, false);
+                    $("#nombreEditar").val("");
+                }
+            })
+        });
+
+        $("body").on("click", ".borrarEditorial", function(e) {
+            e.preventDefault();
+            let editorial_id = $(this).data("id");
+            confirm("Estas seguro !");
+
+            //Codigo Ajax encargado de eliminar un registro de la BD
+            $.ajax({
+                type: "POST",
+                url: "/editoriales/" + editorial_id,
+                data: {
+                    _method: "DELETE",
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(data) {
+                    var editoriales = $("#tbEditoriales").DataTable();
+                    editoriales.ajax.reload(null, false);
+                },
+            });
+
+        });
+
+
+        $("body").on("click", ".editarEditorial", function() {
+            let id = $(this).data("id");
+            //Recupera la informacion del registro que tenga ese id y lo almacena en la variable data
+            $.getJSON("/editoriales/" + id + "/edit", function(data) {
+                //Se le asigna al input con id (id,nombre) el valor que tiene el objeto data en el arreglo 0 con atributo (id,nombre)
+                $("#id").val(data[0].id);
+                $("#nombreEditar").val(data[0].nombre);
+                //Muestra la ventana modal con dicho id
+                $("#modalEditar").modal("show");
+            })
+        });
+
+    </script>
+
 @stop

@@ -15,7 +15,7 @@ return [
     */
 
     'title' => 'AdminLTE 3',
-    'title_prefix' => '',
+    'title_prefix' => 'Biblioteca - ',
     'title_postfix' => '',
 
     /*
@@ -245,7 +245,21 @@ return [
             'icon'        => 'far fa-fw fa-file',
             'label'       => 4,
             'label_color' => 'success',
-        ],        
+        ],   
+        [
+            'text'        => 'Autores',
+            'url'         => 'autores',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => 4,
+            'label_color' => 'success',
+        ], 
+        [
+            'text'        => 'Parametros',
+            'url'         => 'parametros',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => 4,
+            'label_color' => 'success',
+        ],           
     ],
 
     /*

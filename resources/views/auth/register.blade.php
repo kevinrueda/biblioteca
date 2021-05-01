@@ -17,14 +17,14 @@
                 <x-label for="id" :value="__('Documento de identificación')" />
 
                 <x-input id="id" class="block mt-1 w-full" type="text" name="id" :value="old('id')" required
-                    autofocus />
+                    autofocus onkeypress='return validaNumericos(event)' />
             </div>
 
             <!-- Nombre -->
             <div class="mt-2">
-                <x-label for="nombre" :value="__('Nombre')" />
+                <x-label for="name" :value="__('Nombre')" />
 
-                <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')" required
+                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
                     autofocus />
             </div>
 
@@ -79,7 +79,7 @@
                 <x-label for="telefono" :value="__('Teléfono')" />
 
                 <x-input id="telefono" class="block mt-1 w-full" type="tel" name="telefono" :value="old('telefono')"
-                    required autofocus />
+                    required autofocus onkeypress='return validaNumericos(event)' />
             </div>
 
             <!-- Contraseña -->
@@ -177,12 +177,22 @@
                             response.forEach(element => {
                                 $('#municipio_id').append(
                                     `<option value="${element['id']}">${element['nombre']}</option>`
-                                    );
+                                );
                             });
                         }
                     });
                 });
             });
+
+        </script>
+
+        <script>
+            function validaNumericos(event) {
+                if (event.charCode >= 48 && event.charCode <= 57) {
+                    return true;
+                }
+                return false;
+            }
 
         </script>
 

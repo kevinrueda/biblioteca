@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'id' => 'required|integer',
-            'nombre' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'municipio_id' => 'required',
@@ -60,7 +60,7 @@ class RegisteredUserController extends Controller
         Auth::login($user = User::create([
             'id' => $request->id,
             'rol_id' => 4,
-            'nombre' => $request->nombre,
+            'name' => $request->name,
             'apellido' => $request->apellido,
             'email' => $request->email,
             'municipio_id' => $request->municipio_id,
