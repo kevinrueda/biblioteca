@@ -114,7 +114,5 @@ class EditorialeController extends Controller
     public function destroy(Editoriale $editoriale)
     {
         Editoriale::where('id', $editoriale->id)->delete();
-
-        return redirect('editoriales');
     }
 }
