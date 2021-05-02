@@ -13,15 +13,15 @@
         <table id="tbEditoriales" class="table table-hover table-bordered table-striped text-center mt-4">
             <thead class="bg-dark">
                 <tr>
-                    <th>ID</th>
+                    <th width="10rem">ID</th>
                     <th>Nombre</th>
-                    <th width="200px">Acciones</th>
+                    <th width="200rem">Acciones</th>
                 </tr>
             </thead>
         </table>
     </div>
 
-    <div id="modalCrear" class="modal fade" >
+    <div id="modalCrear" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-gradient-success">
@@ -35,7 +35,7 @@
                     <form id="frmEditoriales" action="editoriales">
                         <div class="form-group">
                             <label for="nombre" class="col-form-label">Nombre</label>
-                            <input id="nombre" name="nombre" type="text" class="form-control"  required>
+                            <input id="nombre" name="nombre" type="text" class="form-control" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
@@ -82,14 +82,18 @@
 @section('css')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('js')
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-
         //Al cargar la pagina se establece la relacion de la tabla con DataTable
         $(document).ready(function() {
             var editoriales = $("#tbEditoriales").DataTable({
@@ -157,7 +161,7 @@
             //Codigo Ajax encargado de almacenar un nuevo registro a la BD
             $.ajax({
                 type: "POST",
-                url: "{{ route("editoriales.store") }}",
+                url: "{{ route('editoriales.store') }}",
                 data: data,
                 //Si el metodo POST fue exitoso se lleva a cabo el siguiente codigo
                 success: function() {
@@ -166,6 +170,7 @@
                     //Actualiza la tabla sin recargar la pagina y mantiene el indice de la paginacion
                     editoriales.ajax.reload(null, false);
                     $("#nombre").val("");
+                    toastr.success('Editorial agregada con éxito');
                 }
             })
         });
@@ -190,6 +195,7 @@
                     var editoriales = $("#tbEditoriales").DataTable();
                     editoriales.ajax.reload(null, false);
                     $("#nombreEditar").val("");
+                    toastr.success('Editorial modificada con éxito');
                 }
             })
         });
@@ -197,22 +203,37 @@
         $("body").on("click", ".borrarEditorial", function(e) {
             e.preventDefault();
             let editorial_id = $(this).data("id");
-            confirm("Estas seguro !");
-
-            //Codigo Ajax encargado de eliminar un registro de la BD
-            $.ajax({
-                type: "POST",
-                url: "/editoriales/" + editorial_id,
-                data: {
-                    _method: "DELETE",
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(data) {
-                    var editoriales = $("#tbEditoriales").DataTable();
-                    editoriales.ajax.reload(null, false);
-                },
-            });
-
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir los cambios!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, eliminar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Eliminado!',
+                        'La editorial fue eliminada.',
+                        'success',
+                        //Codigo Ajax encargado de eliminar un registro de la BD
+                        $.ajax({
+                            type: "POST",
+                            url: "/editoriales/" + editorial_id,
+                            data: {
+                                _method: "DELETE",
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(data) {
+                                var editoriales = $("#tbEditoriales").DataTable();
+                                editoriales.ajax.reload(null, false);
+                            },
+                        })
+                    )
+                }
+            })
         });
 
 

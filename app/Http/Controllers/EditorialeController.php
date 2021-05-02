@@ -25,8 +25,7 @@ class EditorialeController extends Controller
         $editoriales = Editoriale::all();
         return datatables()->of($editoriales)
             ->addColumn('acciones', function ($row) {
-                $html = '<a href="#" class="btn btn-primary btn-sm verEditorial">Ver</a> ';
-                $html .= '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Editar" class="btn btn-secondary btn-sm editarEditorial" data-toggle="modal" data-target="#modalEditar">Editar</a>';
+                $html = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Editar" class="btn btn-secondary btn-sm editarEditorial" data-toggle="modal" data-target="#modalEditar">Editar</a>';
                 $html .= ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Borrar" class="btn btn-danger btn-sm borrarEditorial">Borrar</a>';
 
                 return $html;
